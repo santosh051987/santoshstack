@@ -91,7 +91,7 @@ async function apiCall<T>(
     options?: RequestInit
 ): Promise<T> {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    
+
     const response = await fetch(`${API_URL}${endpoint}`, {
         headers: {
             'Content-Type': 'application/json',
@@ -142,6 +142,7 @@ export const productApi = {
         method: 'POST',
         body: JSON.stringify(data),
     }),
+    getBySlug: (slug: string) => apiCall<Product>(`/api/products/slug/${slug}`),
 };
 
 // Order API
