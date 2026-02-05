@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { aboutApi, AboutUs } from '@/lib/api';
+import { aboutUsApi, AboutUs } from '@/lib/api';
 
 export default function AboutPage() {
     const [about, setAbout] = useState<AboutUs | null>(null);
@@ -10,7 +10,7 @@ export default function AboutPage() {
     useEffect(() => {
         const fetchAbout = async () => {
             try {
-                const data = await aboutApi.get();
+                const data = await aboutUsApi.get();
                 setAbout(data);
             } catch (error) {
                 console.error('Error fetching about data:', error);
