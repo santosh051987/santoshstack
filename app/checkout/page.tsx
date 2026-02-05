@@ -38,71 +38,98 @@ export default function CheckoutPage() {
 
             await orderApi.create(orderData);
             clearCart();
-            alert('Order placed successfully! Thank you for your purchase.');
             router.push('/');
         } catch (err) {
             console.error(err);
-            alert('Failed to place order. Please try again.');
+            alert('Mission critical failure: Could not finalize transaction.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <h1 className="text-4xl font-bold mb-12 bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent text-center">Checkout</h1>
+        <div className="min-h-screen bg-[#fcfcfc] py-32 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <div className="mb-24">
+                    <div className="inline-block px-4 py-1.5 mb-6 rounded-full border border-gray-100 bg-white shadow-sm">
+                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Transaction Suite</span>
+                    </div>
+                    <h1 className="text-6xl md:text-8xl font-black text-gray-900 mb-8 tracking-tighter uppercase leading-[0.9]">
+                        Finalize<br />Inquisition
+                    </h1>
+                </div>
 
-            <div className="max-w-3xl mx-auto">
-                <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-2 gap-24">
                     {/* Customer Info */}
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold mb-6">Your Information</h2>
-                        <div>
-                            <label className="block text-sm text-gray-400 mb-2">Full Name</label>
-                            <input
-                                type="text"
-                                required
-                                value={formData.name}
-                                onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                className="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 transition-colors"
-                                placeholder="John Doe"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm text-gray-400 mb-2">Email Address</label>
-                            <input
-                                type="email"
-                                required
-                                value={formData.email}
-                                onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                className="w-full bg-gray-800 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary-500 transition-colors"
-                                placeholder="john@example.com"
-                            />
-                        </div>
+                    <div className="bg-white p-12 md:p-16 rounded-[3rem] border border-gray-100 shadow-sm space-y-12">
+                        <section>
+                            <h2 className="text-sm font-black text-gray-900 uppercase tracking-[0.2em] mb-12">Client Identity</h2>
+                            <div className="space-y-8">
+                                <div>
+                                    <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-4">Legal Name</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={formData.name}
+                                        onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                        className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-gray-900 font-medium focus:ring-2 focus:ring-gray-900 transition-all placeholder:text-gray-200"
+                                        placeholder="Full Name"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-4">Correspondence Channel</label>
+                                    <input
+                                        type="email"
+                                        required
+                                        value={formData.email}
+                                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                        className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-gray-900 font-medium focus:ring-2 focus:ring-gray-900 transition-all placeholder:text-gray-200"
+                                        placeholder="email@example.com"
+                                    />
+                                </div>
+                            </div>
+                        </section>
                     </div>
 
                     {/* Order Summary */}
-                    <div className="glass-dark p-8 rounded-3xl border border-white/10 flex flex-col">
-                        <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
-                        <div className="flex-1 space-y-4 mb-8 overflow-y-auto max-h-60 pr-2">
-                            {cart.map(item => (
-                                <div key={item.id} className="flex justify-between text-sm">
-                                    <span className="text-gray-400">{item.name} x {item.quantity}</span>
-                                    <span className="font-medium font-mono">${((item.price * item.quantity) / 100).toFixed(2)}</span>
-                                </div>
-                            ))}
+                    <div className="flex flex-col justify-between">
+                        <div className="bg-gray-900 p-12 rounded-[3rem] text-white shadow-2xl shadow-gray-900/20">
+                            <h2 className="text-sm font-black text-gray-400 uppercase tracking-[0.2em] mb-12">Manifest Summary</h2>
+                            <div className="space-y-6 mb-12 max-h-60 overflow-y-auto pr-4 custom-scrollbar">
+                                {cart.map(item => (
+                                    <div key={item.id} className="flex justify-between items-baseline py-4 border-b border-white/5 last:border-0">
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-bold uppercase tracking-tight">{item.name}</span>
+                                            <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest mt-1">QTY: {item.quantity}</span>
+                                        </div>
+                                        <span className="font-black tabular-nums tracking-tighter">${((item.price * item.quantity) / 100).toFixed(2)}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="pt-8 border-t border-white/10 flex justify-between items-baseline mb-12">
+                                <span className="text-xs font-black uppercase tracking-[0.2em]">Collective Total</span>
+                                <span className="text-5xl font-black tabular-nums tracking-tighter">${(cartTotal / 100).toFixed(2)}</span>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full bg-white text-gray-900 h-20 rounded-[2rem] font-black uppercase tracking-[0.2em] text-xs shadow-xl shadow-white/5 hover:bg-gray-100 transition-all active:scale-[0.98] disabled:opacity-50"
+                            >
+                                {loading ? 'Orchestrating...' : 'Authorize Transaction'}
+                            </button>
                         </div>
-                        <div className="border-t border-white/10 pt-4 flex justify-between text-2xl font-bold text-white mb-8">
-                            <span>Total</span>
-                            <span className="text-primary-400">${(cartTotal / 100).toFixed(2)}</span>
+
+                        <div className="mt-12 text-center">
+                            <button
+                                onClick={() => router.back()}
+                                className="text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-gray-900 transition-colors"
+                            >
+                                Return to Selection
+                            </button>
                         </div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full bg-gradient-to-r from-primary-500 to-accent-500 text-white h-14 rounded-2xl font-bold text-lg shadow-xl shadow-primary-500/20 hover:opacity-90 transition-opacity disabled:opacity-50"
-                        >
-                            {loading ? 'Processing...' : 'Place Order'}
-                        </button>
                     </div>
                 </form>
             </div>

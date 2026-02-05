@@ -148,6 +148,11 @@ export const productApi = {
 // Order API
 export const orderApi = {
     getAll: () => apiCall<Order[]>('/api/orders'),
+    getById: (id: number) => apiCall<Order>(`/api/orders/${id}`),
+    updateStatus: (id: number, status: string) => apiCall<Order>(`/api/orders/${id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status }),
+    }),
     create: (data: any) => apiCall<Order>('/api/orders', {
         method: 'POST',
         body: JSON.stringify(data),
